@@ -29,9 +29,11 @@ scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 scalariformSettings
 
 ScalariformKeys.preferences := ScalariformKeys.preferences.value
-  .setPreference(AlignParameters, true)
+  .setPreference(AlignParameters, false)
   .setPreference(DoubleIndentClassDeclaration, true)
 
+
+addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % "0.1.17")
 
 scapegoatVersion := "1.3.0"
 
