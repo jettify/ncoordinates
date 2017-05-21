@@ -27,7 +27,7 @@ case class Coordinate(vec: Seq[Double], error: Double, adjustment: Double, heigh
       height
     }
 
-    Coordinate(newVec, error, adjustment, height)
+    Coordinate(newVec, error, adjustment, newHeight)
   }
 
   def distanceTo(other: Coordinate): Double = {
