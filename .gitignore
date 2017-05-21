@@ -1,0 +1,12 @@
+# scala
+*.class
+target
+# idea
+*.iml
+*.ipr
+*.iws
+.idea
+out
+# macos
+.DS_Store
+
