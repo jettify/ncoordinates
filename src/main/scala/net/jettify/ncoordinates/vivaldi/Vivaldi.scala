@@ -55,7 +55,7 @@ class Vivaldi(private val config: Config) {
       val dist = coord.rawDistanceTo(other)
       adjustmentSamples(adjustmentIndex) = rttSeconds - dist
       adjustmentIndex = (adjustmentIndex + 1) % config.adjustmentWindowSize
-      val sum: Double = adjustmentSamples.toSeq.foldLeft(0.0) { (acc, i) => acc + i }
+      val sum: Double = adjustmentSamples.toSeq.sum
       coord.adjustment = sum / (2.0 * config.adjustmentWindowSize)
     }
   }

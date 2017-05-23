@@ -13,12 +13,9 @@ class VivaldiTest extends NCoordinatesTestSuite {
     }
   }
 
-  test("Instance creation") {
+  test("Instance creation 2") {
     val config = new ConfigBuilder()
-      .withDimensionality(0)
       .build()
-    intercept[RuntimeException] {
-      new Vivaldi(config)
-    }
+    new Vivaldi(config)
   }
 }
