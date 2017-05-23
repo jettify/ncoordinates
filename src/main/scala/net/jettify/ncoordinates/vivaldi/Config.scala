@@ -1,6 +1,5 @@
 package net.jettify.ncoordinates.vivaldi
 
-
 case class Config(
   dimensionality: Int = 8,
   vivaldiErrorMax: Double = 1.5,
@@ -22,8 +21,14 @@ class ConfigBuilder() {
   private var latencyFilterSize: Int = 3
   private var gravityRho: Double = 150.0
 
-  def withDimensionality(d: Int): Unit = dimensionality = d
-  def withVivaldiErrorMax(d: Double): Unit = vivaldiErrorMax = d
+  def withDimensionality(d: Int): this.type = {
+    dimensionality = d
+    this
+  }
+  def withVivaldiErrorMax(d: Double): this.type = {
+    vivaldiErrorMax = d
+    this
+  }
 
   def build(): Config = {
     Config(dimensionality, vivaldiErrorMax, vivaldiCE,

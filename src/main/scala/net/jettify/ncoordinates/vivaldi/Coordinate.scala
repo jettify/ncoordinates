@@ -1,9 +1,11 @@
 package net.jettify.ncoordinates.vivaldi
 
 import Coordinate._
+
+import scala.concurrent.duration._
 import scala.util.Random
 
-case class Coordinate(vec: Seq[Double], error: Double, adjustment: Double, height: Double) {
+case class Coordinate(vec: Seq[Double], var error: Double, var adjustment: Double, height: Double) {
 
   def this(config: Config) = this(
     Seq.fill(config.dimensionality)(0.0),
@@ -30,7 +32,7 @@ case class Coordinate(vec: Seq[Double], error: Double, adjustment: Double, heigh
     Coordinate(newVec, error, adjustment, newHeight)
   }
 
-  def distanceTo(other: Coordinate): Double = {
+  def distanceTo(other: Coordinate): Duration = {
     if (other.vec.length != vec.length) {
       throw new RuntimeException("Not compatible")
     }
@@ -39,10 +41,10 @@ case class Coordinate(vec: Seq[Double], error: Double, adjustment: Double, heigh
     val adjDist = dist + adjustment + other.adjustment
     val fdist = if (adjDist > 0) adjDist else dist
 
-    dist * secondsToNanoseconds
+    dist.nanoseconds
   }
 
-  private def rawDistanceTo(other: Coordinate): Double = {
+  def rawDistanceTo(other: Coordinate): Double = {
     magnitude(diff(vec, other.vec)) + height + other.height
   }
 
