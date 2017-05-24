@@ -35,9 +35,10 @@ class Vivaldi(private val config: Config) {
     val wrongness = Math.abs(dist - rtt) / rtt
     val totalError = Math.max(coord.error + other.error, zeroThreshold)
     val weight = coord.error / totalError
-    coord.error = config.vivaldiCE * weight * wrongness +
+
+    val newError = config.vivaldiCE * weight * wrongness +
       coord.error * (1.0 - config.vivaldiCE * weight)
-    coord.error = Math.min(coord.error, config.vivaldiErrorMax)
+    coord = coord.copy(error = Math.min(coord.error, config.vivaldiErrorMax))
 
     val delta = config.vivaldiCC * weight
     val force = delta * (rttSeconds - dist)
@@ -56,7 +57,9 @@ class Vivaldi(private val config: Config) {
       adjustmentSamples(adjustmentIndex) = rttSeconds - dist
       adjustmentIndex = (adjustmentIndex + 1) % config.adjustmentWindowSize
       val sum: Double = adjustmentSamples.toSeq.sum
-      coord.adjustment = sum / (2.0 * config.adjustmentWindowSize)
+
+      val newAdjustment = sum / (2.0 * config.adjustmentWindowSize)
+      coord = coord.copy(adjustment = newAdjustment)
     }
   }
 

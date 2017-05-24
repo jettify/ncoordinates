@@ -1,11 +1,11 @@
 package net.jettify.ncoordinates.vivaldi
 
-import Coordinate._
-
 import scala.concurrent.duration._
 import scala.util.Random
 
-case class Coordinate(vec: Seq[Double], var error: Double, var adjustment: Double, height: Double) {
+import Coordinate._
+
+case class Coordinate(vec: Seq[Double], error: Double, adjustment: Double, height: Double) {
 
   def this(config: Config) = this(
     Seq.fill(config.dimensionality)(0.0),
