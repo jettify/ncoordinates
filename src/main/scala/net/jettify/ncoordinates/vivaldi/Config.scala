@@ -29,6 +29,10 @@ class ConfigBuilder() {
     vivaldiErrorMax = d
     this
   }
+  def withHeightMin(d: Double): this.type = {
+    heightMin = d
+    this
+  }
 
   def build(): Config = {
     Config(dimensionality, vivaldiErrorMax, vivaldiCE,

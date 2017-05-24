@@ -12,6 +12,10 @@ case class Coordinate(vec: Seq[Double], error: Double, adjustment: Double, heigh
     config.vivaldiErrorMax, 0.0, config.heightMin
   )
 
+  def compatibleWith(other: Coordinate): Boolean = {
+    other.vec.length == vec.length
+  }
+
   def applyForce(config: Config, force: Double, other: Coordinate): Coordinate = {
     if (other.vec.length != vec.length) {
       throw new RuntimeException("Not compatible")
@@ -40,8 +44,7 @@ case class Coordinate(vec: Seq[Double], error: Double, adjustment: Double, heigh
     val dist = rawDistanceTo(other)
     val adjDist = dist + adjustment + other.adjustment
     val fdist = if (adjDist > 0) adjDist else dist
-
-    dist.nanoseconds
+    fdist.seconds
   }
 
   def rawDistanceTo(other: Coordinate): Double = {
