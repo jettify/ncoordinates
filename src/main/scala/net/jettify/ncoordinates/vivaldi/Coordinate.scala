@@ -60,23 +60,23 @@ object Coordinate {
 
   def apply(config: Config): Coordinate = new Coordinate(config)
 
-  private def add(v1: Seq[Double], v2: Seq[Double]): Seq[Double] = {
+  def add(v1: Seq[Double], v2: Seq[Double]): Seq[Double] = {
     v1.zip(v2).map({ case (x, y) => x + y })
   }
 
-  private def diff(v1: Seq[Double], v2: Seq[Double]): Seq[Double] = {
+  def diff(v1: Seq[Double], v2: Seq[Double]): Seq[Double] = {
     v1.zip(v2).map({ case (x, y) => x - y })
   }
 
-  private def mul(v: Seq[Double], factor: Double): Seq[Double] = {
+  def mul(v: Seq[Double], factor: Double): Seq[Double] = {
     v.map(x => x * factor)
   }
 
-  private def magnitude(v: Seq[Double]) = {
+  def magnitude(v: Seq[Double]): Double = {
     Math.sqrt(v.foldLeft(0.0) { (acc, i) => acc + i * i })
   }
 
-  private def unitVectorAt(v1: Seq[Double], v2: Seq[Double]): (Seq[Double], Double) = {
+  def unitVectorAt(v1: Seq[Double], v2: Seq[Double]): (Seq[Double], Double) = {
     val r = diff(v1, v2)
     val mag = magnitude(r)
     if (mag > zeroThreshold) {
