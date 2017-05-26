@@ -134,6 +134,21 @@ class CoordinateTest extends NCoordinatesTestSuite {
     c = origin.applyForce(config, 1.0, origin)
     assert(origin.distanceTo(c).toUnit(SECONDS) === 1.0)
 
+    val configH = new ConfigBuilder()
+      .withDimensionality(3)
+      .withHeightMin(10.0e-6)
+      .build()
+
+    val originH = Coordinate(configH)
+    c = origin.applyForce(configH, 5.3, above)
+    assert(c.vec == Seq(0.0, 0.0, -5.3))
+    // TODO: fix this assert
+    // assert(c.height == configH.heightMin + 5.3 * configH.heightMin / 2.9)
+
+    c = origin.applyForce(configH, -5.3, above)
+    assert(c.vec == Seq(0.0, 0.0, 5.3))
+    assert(c.height == configH.heightMin)
+
     val c3 = Coordinate(new ConfigBuilder().withDimensionality(8).build())
     intercept[RuntimeException] {
       c.distanceTo(c3)
