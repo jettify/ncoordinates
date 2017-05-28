@@ -5,17 +5,19 @@ import scala.util.Random
 
 import Coordinate._
 
-case class Coordinate(vec: Seq[Double], error: Double, adjustment: Double, height: Double) {
+final case class Coordinate(vec: Seq[Double], error: Double, adjustment: Double, height: Double) {
 
   def this(config: Config) = this(
     Seq.fill(config.dimensionality)(0.0),
     config.vivaldiErrorMax, 0.0, config.heightMin
   )
 
+  @SuppressWarnings(Array("org.wartremover.warts.Equals"))
   def compatibleWith(other: Coordinate): Boolean = {
     other.vec.length == vec.length
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.Equals"))
   def applyForce(config: Config, force: Double, other: Coordinate): Coordinate = {
     if (other.vec.length != vec.length) {
       throw new RuntimeException("Not compatible")
@@ -36,6 +38,7 @@ case class Coordinate(vec: Seq[Double], error: Double, adjustment: Double, heigh
     Coordinate(newVec, error, adjustment, newHeight)
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.Equals"))
   def distanceTo(other: Coordinate): Duration = {
     if (other.vec.length != vec.length) {
       throw new RuntimeException("Not compatible")

@@ -1,14 +1,14 @@
 package net.jettify.ncoordinates.vivaldi
 
-case class Config(
-  dimensionality: Int = 8,
-  vivaldiErrorMax: Double = 1.5,
-  vivaldiCE: Double = 0.25,
-  vivaldiCC: Double = 0.25,
-  adjustmentWindowSize: Int = 20,
-  heightMin: Double = 10.0e-6,
-  latencyFilterSize: Int = 3,
-  gravityRho: Double = 150.0
+final case class Config(
+  dimensionality: Int,
+  vivaldiErrorMax: Double,
+  vivaldiCE: Double,
+  vivaldiCC: Double,
+  adjustmentWindowSize: Int,
+  heightMin: Double,
+  latencyFilterSize: Int,
+  gravityRho: Double
 )
 
 class ConfigBuilder() {
