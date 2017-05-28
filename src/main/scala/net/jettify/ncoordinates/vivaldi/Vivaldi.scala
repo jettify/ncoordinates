@@ -1,12 +1,12 @@
 package net.jettify.ncoordinates.vivaldi
 
+import scala.concurrent.duration._
 import scala.concurrent.duration.Duration
 
 class Vivaldi(private val config: Config) {
 
   if (config.dimensionality <= 0) {
     throw new RuntimeException("Dimensionality must be > 0")
-
   }
 
   private var coord = Coordinate(config)
@@ -20,8 +20,13 @@ class Vivaldi(private val config: Config) {
 
   private def latencyFilter(nodeId: String, rttSeconds: Double): Double = {
     val samples = latencyFilterSamples
-      .getOrElseUpdate(nodeId, Seq.fill(config.latencyFilterSize)(0.0))
-    val newSamples = samples.drop(1) ++ Seq(rttSeconds)
+      .getOrElseUpdate(nodeId, Seq.empty[Double])
+
+    val newSamples = if (samples.length >= config.latencyFilterSize) {
+      samples.drop(1) ++ Seq(rttSeconds)
+    } else {
+      samples ++ Seq(rttSeconds)
+    }
     latencyFilterSamples(nodeId) = newSamples
     val index: Int = newSamples.length / 2
     val median = newSamples.sorted.toList(index)
@@ -30,7 +35,7 @@ class Vivaldi(private val config: Config) {
 
   private def updateVivaldi(other: Coordinate, rttSeconds: Double): Unit = {
     val zeroThreshold = 1.0e-6
-    val dist = coord.distanceTo(other).toSeconds
+    val dist = coord.distanceTo(other).toUnit(SECONDS)
     val rtt = Math.max(rttSeconds, zeroThreshold)
     val wrongness = Math.abs(dist - rtt) / rtt
     val totalError = Math.max(coord.error + other.error, zeroThreshold)
@@ -46,7 +51,7 @@ class Vivaldi(private val config: Config) {
   }
 
   private def updateGravity(): Unit = {
-    val dist = origin.distanceTo(coord).toSeconds
+    val dist = origin.distanceTo(coord).toUnit(SECONDS)
     val force = -1.0 * Math.pow(dist / config.gravityRho, 2.0)
     coord = coord.applyForce(config, force, origin)
   }
@@ -63,7 +68,7 @@ class Vivaldi(private val config: Config) {
     }
   }
 
-  def forgetNode(nodeId: String): Unit = {
+  def forgetNode(nodeId: String): Option[Seq[Double]] = {
     latencyFilterSamples.remove(nodeId)
   }
 
@@ -72,7 +77,7 @@ class Vivaldi(private val config: Config) {
   }
 
   def update(nodeId: String, other: Coordinate, rtt: Duration): Coordinate = {
-    val rttSeconds = latencyFilter(nodeId, rtt.toSeconds)
+    val rttSeconds = latencyFilter(nodeId, rtt.toUnit(SECONDS))
     updateVivaldi(other, rttSeconds)
     updateAdjustment(other, rttSeconds)
     updateGravity()
