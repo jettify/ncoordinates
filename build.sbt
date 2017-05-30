@@ -38,7 +38,7 @@ addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % "0.1.17")
 scapegoatVersion := "1.3.0"
 
 wartremoverErrors ++= Warts.allBut(Wart.Var, Wart.Throw, Wart.MutableDataStructures,
-  Wart.Overloading)
+  Wart.Overloading, Wart.Equals, Wart.NonUnitStatements)
 
 publishMavenStyle := true
 
